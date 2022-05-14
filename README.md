@@ -2,7 +2,7 @@
 
 #### Dataset "Heart Disease Cleveland UCI" is described in notebooks/EDA.ipyng
 
-Use Amazon s3 for data 
+Use Amazon s3 for downloading data. Data load when run train_pipeline. 
 
 ## Installation
 
@@ -14,7 +14,7 @@ Use Amazon s3 for data
 
 ## Usage 
 
-Models - RandomForestClassifier or Gradien:
+Models - RandomForestClassifier or GradientBoostingClassifier:
 
 `export PYTHONPATH=.`
 
@@ -43,8 +43,9 @@ Tests:
     ├── requirements.txt      <- The requirements file for reproducing the analysis environment, e.g.
     │                         generated with `pip freeze > requirements.txt`
     │
+    ├── setup.py           <- makes project pip installable (pip install -e .)
     │
-    └── ml_project                   <- Source code for use in this project
+    └── ml_project                  <- Source code for use in this project
         ├── __init__.py       <- Makes src a Python module
         │
         ├── data              <- Scripts to download or read data
@@ -52,7 +53,7 @@ Tests:
         ├── features          <- Scripts to turn raw data into features for modeling
         │
         ├── models            <- Scripts to train models and then use trained models to make
-        │                   predictions
+        │                     predictions
         │
         ├── tests             <- Scripts to test code 
         │
