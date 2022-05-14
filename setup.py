@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 import pathlib
 
 parent_path = str(pathlib.Path(__file__).parent)
-absolute_path = parent_path + 'requirements.txt'
+absolute_path = parent_path + '/requirements.txt'
 with open(absolute_path) as f:
     required = f.read().splitlines()
 
