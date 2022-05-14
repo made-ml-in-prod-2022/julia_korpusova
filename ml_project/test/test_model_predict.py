@@ -19,22 +19,6 @@ from ml_project.models.model_train import (train_model,
                                            )
 
 
-# @pytest.fixture
-# def pipeline_transformer(df: pd.DataFrame,
-#                          features: FeatureParams,
-#                          train_params: TrainingParams) -> Tuple[Pipeline, ColumnTransformer]:
-#
-#     target = extract_target(df, features)
-#     df.drop(columns=features.target_col)
-#
-#     transformer = build_transformer(features)
-#     transformer.fit(df)
-#
-#     transformed_data = make_features(transformer, df)
-#     model = train_model(transformed_data, target, train_params)
-#     return create_inference_pipeline(model, transformer), transformer
-
-
 @pytest.fixture
 def pipeline_transformer(df: pd.DataFrame,
                          features: FeatureParams,

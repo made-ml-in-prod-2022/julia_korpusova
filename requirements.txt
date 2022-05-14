@@ -11,3 +11,4 @@ pyyaml
 marshmallow-dataclass
 pandas
 boto3
+mock
