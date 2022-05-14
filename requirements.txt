@@ -12,3 +12,4 @@ marshmallow-dataclass
 pandas
 boto3
 mock
+pytest-mock
