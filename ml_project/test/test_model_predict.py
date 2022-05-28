@@ -17,6 +17,7 @@ from sklearn.pipeline import Pipeline
 from ml_project.models.model_train import (train_model,
                                            create_inference_pipeline,
                                            )
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 
 @pytest.fixture
@@ -44,4 +45,6 @@ def test_predict_model(df: pd.DataFrame,
     target = extract_target(df, features)
     df.drop(columns=features.target_col)
     predict = predict_model(model, df)
+    assert accuracy_score(target, predict) >= 80
+    assert precision_score(target, predict, average='macro') >= 80
     assert predict.shape[0] == target.shape[0]

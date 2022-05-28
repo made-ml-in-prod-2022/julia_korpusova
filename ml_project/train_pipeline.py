@@ -17,14 +17,9 @@ from ml_project.models.model_train import (train_model,
                                            serialize_model,
                                            evaluate_model,
                                            )
-# import mlflow
 
 from ml_project.models.model_train import create_inference_pipeline
 from ml_project.models.model_predict import predict_model
-
-# logging.basicConfig(level=logging.INFO,
-#                     format="%(pasctime)s\t%(levelname)s\t%(message)s",
-#                     )
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler(sys.stdout)
@@ -36,30 +31,9 @@ def train_pipeline(config_path: str):
     training_pipeline_params = read_training_pipeline_params(config_path)
     return run_train_pipeline(training_pipeline_params)
 
-    # if training_pipeline_params.use_mlflow:
-    #
-    #     mlflow.set_tracking_uri(training_pipeline_params.mlflow_uri)
-    #     mlflow.set_experiment(training_pipeline_params.mlflow_experiment)
-    #     with mlflow.start_run():
-    #         mlflow.log_artifact(config_path)
-    #         model_path, metrics = run_train_pipeline(training_pipeline_params)
-    #         mlflow.log_metrics(metrics)
-    #         mlflow.log_artifact(model_path)
-    # else:
-    #     return run_train_pipeline(training_pipeline_params)
-
 
 def run_train_pipeline(training_pipeline_params: TrainingPipelineParams):
     downloading_params = training_pipeline_params.downloading_params
-
-    # if downloading_params:
-    #     os.makedirs(downloading_params.output_folder, exist_ok=True)
-    #     for path in downloading_params.paths:
-    #         download_data_from_s3(
-    #             downloading_params.s3_bucket,
-    #             path,
-    #             os.path.join(downloading_params.output_folder, Path(path).name),
-    #         )
 
     if downloading_params:
         for path in downloading_params.paths:
