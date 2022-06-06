@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 import requests
 import logging
@@ -15,17 +14,17 @@ def main():
     data = pd.read_csv("data/test.csv").drop(columns="Unnamed: 0")
     print(data.head())
 
-    features = data.columns.to_list()
+    features = list(data.columns)
     print(features)
 
     for row in data.itertuples():
         data_request = [x for x in row]
-        request = {"data": [data_request], "features": features}
-        print(request)
+        request = {"data": [data_request[-13:]], "features": features}
+        logger.info(f"request {request}")
         response = requests.get(url,
                                 json=request,
                                 )
-        logging.info(f"code: {response.status_code}, json: {response.json()}")
+        print(f"code: {response.status_code}, json: {response.json()}")
 
 
 if __name__ == "__main__":

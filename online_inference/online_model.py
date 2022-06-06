@@ -41,18 +41,17 @@ def main():
 @app.on_event("startup")
 def startup():
     global model
-    model_local_path = "models/model.pkl"
-    model_path = pathlib.Path(__file__).parent.joinpath(model_local_path)
-    print(model_path)
-    print(model_path.exists())
-    if not model_path.exists():
+    model_local_path = "model.pkl"
+    # model_path = pathlib.Path(__file__).parent.joinpath(model_local_path)
+    print(os.path.exists(model_local_path))
+    if not os.path.exists(model_local_path):
         model_url = os.getenv("MODEL_URL")
         if model_url is None:
             model_url = DEFAULT_MODEL_URL
             logger.info("loading model from Google-Drive")
-        gdown.download(model_url, model_local_path, fuzzy=True)
+        gdown.download(model_url, output=model_local_path, fuzzy=True)
 
-    model = load_model(str(model_path))
+    model = load_model(model_local_path)
     logger.info("model upload")
 
 
@@ -64,8 +63,8 @@ def health() -> int:
 @app.get("/predict/", response_model=List[Prediction])
 def predict(request: Request):
     data = pd.DataFrame(request.data, columns=request.features)
-    predictions = model.predict(data)
-    return [Prediction(label=int(lbl))
+    predictions = model.predict(data).tolist()
+    return [Prediction(condition=int(lbl))
             for lbl in predictions
             ]
 
@@ -73,4 +72,3 @@ def predict(request: Request):
 if __name__ == "__main__":
     uvicorn.run("online_model:app", host="0.0.0.0",
                 port=os.getenv("PORT", 8000))
-
