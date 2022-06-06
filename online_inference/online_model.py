@@ -20,7 +20,7 @@ model: Optional[Pipeline] = None
 
 
 class Request(BaseModel):
-    data: List[conlist(Union[float, str], min_items=13, max_items=13)]
+    data: List[conlist(Union[float, str, int, None], min_items=13, max_items=13)]
     features: List[str]
 
 
@@ -63,11 +63,8 @@ def health() -> int:
 
 @app.get("/predict/", response_model=List[Prediction])
 def predict(request: Request):
-    global model
     data = pd.DataFrame(request.data, columns=request.features)
-    print(data.head())
     predictions = model.predict(data)
-    print(predictions)
     return [Prediction(label=int(lbl))
             for lbl in predictions
             ]
