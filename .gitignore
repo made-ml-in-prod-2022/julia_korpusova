@@ -1,3 +1,6 @@
 .pytest_cache
 .idea
 online_inference/.__pycacha__
+online_inference/.env
+online_inference/__pycacha__
+online_inference/env

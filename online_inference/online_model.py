@@ -1,6 +1,5 @@
 import os
 import logging
-import pathlib
 from typing import List, Union, Optional
 import pandas as pd
 import pickle
@@ -11,16 +10,21 @@ from fastapi import FastAPI
 from pydantic import BaseModel, conlist
 from sklearn.pipeline import Pipeline
 
-DEFAULT_MODEL_URL = "https://drive.google.com/file/d/1D9I5kaPQIhiiHwEQACpELTGBF61oqg3a/view?usp=sharing"
-
+DEFAULT_MODEL_URL = "https://drive.google.com/file/d/1ZRoxFOganPtsEe0ijfSaw9tkm_T2m30C/view?usp=sharing"
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+handler.setFormatter(
+    logging.Formatter('%(levelname)s: %(name)s - %(asctime)s - %(message)s'))
+logger.addHandler(handler)
 
 app = FastAPI()
-model: Optional[Pipeline] = None
+model = None
+scaler = None
 
 
 class Request(BaseModel):
-    data: List[conlist(Union[float, str, int, None], min_items=13, max_items=13)]
+    data: List[conlist(Union[float, None], min_items=30, max_items=30)]
     features: List[str]
 
 
@@ -28,14 +32,9 @@ class Prediction(BaseModel):
     condition: int
 
 
-def load_model(path: str) -> Pipeline:
-    with open(path, "rb") as file:
-        return pickle.load(file)
-
-
 @app.get("/")
 def main():
-    return "App for predictions heart diseases <3"
+    return {"message": "App for predictions heart diseases <3"}
 
 
 @app.on_event("startup")
@@ -43,6 +42,7 @@ def startup():
     global model
     model_local_path = "model.pkl"
     logger.info(f" if model exists: {os.path.exists(model_local_path)}")
+
     if not os.path.exists(model_local_path):
         model_url = os.getenv("MODEL_URL")
         if model_url is None:
@@ -50,7 +50,8 @@ def startup():
             logger.info("loading model from Google-Drive")
         gdown.download(model_url, output=model_local_path, fuzzy=True)
 
-    model = load_model(model_local_path)
+    with open(model_local_path, "rb") as file:
+        model = pickle.load(file)
     logger.info("model upload")
 
 
@@ -70,4 +71,4 @@ def predict(request: Request):
 
 if __name__ == "__main__":
     uvicorn.run("online_model:app", host="0.0.0.0",
-                port=os.getenv("PORT", 8000))
+                port=os.getenv("PORT", 8080))
