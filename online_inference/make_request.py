@@ -12,10 +12,10 @@ def main():
     url = "http://0.0.0.0:8000/predict/"
 
     data = pd.read_csv("data/test.csv").drop(columns="Unnamed: 0")
-    print(data.head())
+    logger.info(f"load data: shape - {data.shape}")
 
     features = list(data.columns)
-    print(features)
+    logger.info(f"data features: {features}")
 
     for row in data.itertuples():
         data_request = [x for x in row]

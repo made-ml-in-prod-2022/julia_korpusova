@@ -42,8 +42,7 @@ def main():
 def startup():
     global model
     model_local_path = "model.pkl"
-    # model_path = pathlib.Path(__file__).parent.joinpath(model_local_path)
-    print(os.path.exists(model_local_path))
+    logger.info(f" if model exists: {os.path.exists(model_local_path)}")
     if not os.path.exists(model_local_path):
         model_url = os.getenv("MODEL_URL")
         if model_url is None:
