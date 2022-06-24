@@ -19,7 +19,7 @@ _____
 ```
 kubectl cluster-info
 ```
-![kuber](screenshots/kubernetes_cluster_info.png)
+![img.png](screenshots/kubernetes_cluster_info.png)
 * Далее для работы с кластером использую Lens
 ![img.png](screenshots/lens.png)
 
@@ -29,7 +29,7 @@ kubectl apply -f online-inference-pod.yaml
 kubectl get pods
 ```
 ![img.png](screenshots/1.png)
-![get](screenshots/2.png)
+![img.png](screenshots/2.png)
 
 ## Requests / Limits
 * Request устанавливаем для того, чотбы установить необходимые ресурсы для приложения. При отсутствии необходимого ресурса приложение будет ждать освобождения 
@@ -46,7 +46,7 @@ kubectl get pods
 * уменьшить число реплик, то останутся только старые реплики
 * увеличить число реплик, то старые реплики дополнятся новыми
 
-
+![img.png](screenshots/3.png)
 ________
 ### Самооценка
 
