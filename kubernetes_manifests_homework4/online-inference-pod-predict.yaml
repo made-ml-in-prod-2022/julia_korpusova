@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: online-inference-predict
+  labels:
+    app: online-inference
+spec:
+  containers:
+    - image: juliakorp/online_model:v1
+      command: ["uvicorn", "online_model:app", "--host", "0.0.0.0", "--port", "8080"]
+      name: fastapi-ml
+      ports:
+        - containerPort: 8080
+      readinessProbe:
+        httpGet:
+          path: /predict/
+          port: 8080
+        initialDelaySeconds: 15
+        periodSeconds: 3
