@@ -13,7 +13,7 @@ logger.addHandler(handler)
 
 def main():
     test_file = "data/data.csv"
-    url = "http://0.0.0.0:8080/predict/"
+    url = "http://0.0.0.0:7070/predict/"
 
     path = pathlib.Path(__file__).parent.parent.joinpath(test_file)
     data = pd.read_csv(path, index_col=False).drop(columns="Unnamed: 0")
