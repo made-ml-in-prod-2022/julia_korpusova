@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: online-inference-replicaset
+  labels:
+    app: online-inference
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: online-inference
+  template:
+    metadata:
+      labels:
+        app: online-inference
+    spec:
+      containers:
+        - image: juliakorp/online_model:v1
+          command: [ "uvicorn", "online_model:app", "--host", "0.0.0.0", "--port", "8080" ]
+          name: online-inference-replicaset
+          ports:
+            -  containerPort: 8080

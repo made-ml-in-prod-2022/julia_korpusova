@@ -5,12 +5,14 @@ import pandas as pd
 import pickle
 import uvicorn
 import gdown
+import time
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, conlist
 from sklearn.pipeline import Pipeline
 
 DEFAULT_MODEL_URL = "https://drive.google.com/file/d/1ZRoxFOganPtsEe0ijfSaw9tkm_T2m30C/view?usp=sharing"
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.StreamHandler()
@@ -21,6 +23,7 @@ logger.addHandler(handler)
 app = FastAPI()
 model = None
 scaler = None
+start_time = 0.0
 
 
 class Request(BaseModel):
@@ -39,15 +42,18 @@ def main():
 
 @app.on_event("startup")
 def startup():
+    time.sleep(20)
+    global start_time
+    logger.info(f"start time: {start_time}")
+
     global model
+    start_time = time.time()
     model_local_path = "model.pkl"
-    logger.info(f" if model exists: {os.path.exists(model_local_path)}")
+    logger.info(f"if model exists: {os.path.exists(model_local_path)}")
 
     if not os.path.exists(model_local_path):
-        model_url = os.getenv("MODEL_URL")
-        if model_url is None:
-            model_url = DEFAULT_MODEL_URL
-            logger.info("loading model from Google-Drive")
+        model_url = "https://drive.google.com/file/d/1ZRoxFOganPtsEe0ijfSaw9tkm_T2m30C/view?usp=sharing"
+        logger.info(f"loading model from Google-Drive: {model_url}")
         gdown.download(model_url, output=model_local_path, fuzzy=True)
 
     with open(model_local_path, "rb") as file:
@@ -57,6 +63,10 @@ def startup():
 
 @app.get("/health")
 def health() -> int:
+    current_time = time.time()
+    logger.info(f"working time: {current_time - start_time}")
+    if (current_time - start_time) > 120:
+        raise HTTPException(status_code=404, detail="server drop")
     return not (model is None)
 
 
